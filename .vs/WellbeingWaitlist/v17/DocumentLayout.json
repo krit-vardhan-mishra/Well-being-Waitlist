@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "Write the path of the folder",
+  "Documents": [],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": []
+    }
+  ]
+}
