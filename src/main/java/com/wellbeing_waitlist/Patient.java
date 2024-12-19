@@ -11,6 +11,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+// File for creating a data type of Patient
+
 @Entity
 public class Patient {
     
@@ -37,6 +39,7 @@ public class Patient {
         this.emergency_level = calculateEmergencyLevel(); // Calculating using python code
     }
 
+    // Function for calculating emergency level
     private int calculateEmergencyLevel() {
         try {
             // Get the Python script path from environment variable or use default
@@ -83,6 +86,8 @@ public class Patient {
             return -1; // Return -1 or handle the error appropriately
         }
     }
+
+    // Getters and Setters
 
     public Long getId() {
         return id;

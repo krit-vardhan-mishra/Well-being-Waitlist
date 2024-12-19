@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+// File for controlling the request from the web-page
+
 @Controller
 public class PatientController {
 
@@ -22,7 +24,7 @@ public class PatientController {
     @Autowired
     private DatabaseOperations databaseOperations;
 
-    private static final String ADMIN_PASSWORD = "DB_PASSWORD";
+    private static final String ADMIN_PASSWORD = System.getenv("DB_PASSWORD");      // Create a Environment Variable or enter the password directly for the admin access
 
     @GetMapping("/register")
     public String showRegisterForm() {
@@ -31,9 +33,8 @@ public class PatientController {
 
     @GetMapping("/admin-login")
     public String showAdminLoginPage(Model model) {
-        return "admin-login"; // The name of your admin login template
+        return "admin-login"; 
     }
-
     
     @PostMapping("/register")
     public String registerPatient(@RequestParam String name, @RequestParam int age, @RequestParam String gender, @RequestParam String problem, Model model) {
@@ -91,6 +92,7 @@ public class PatientController {
         }
     }
 
+    // Function for confirming the admin login details
     @PostMapping("/admin-login")
     public String validatePasswordAndShowDetails(@RequestParam("password") String password, Model model) {
         if (ADMIN_PASSWORD.equals(password)) {

@@ -1,6 +1,7 @@
 package com.wellbeing_waitlist;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -9,23 +10,22 @@ import org.springframework.transaction.annotation.Transactional;
 public class PatientService {
 
     private final MaxHeapCustom maxHeapCustom;
-    private final PatientRepository patientRepository;
+    private final DatabaseOperations databaseOperations;
 
-    @Autowired
-    public PatientService(MaxHeapCustom maxHeapCustom, PatientRepository patientRepository) {
+    public PatientService(MaxHeapCustom maxHeapCustom, DatabaseOperations databaseOperations) {
         this.maxHeapCustom = maxHeapCustom;
-        this.patientRepository = patientRepository;
+        this.databaseOperations = databaseOperations;
     }
 
     public void addPatient(Patient patient) {
         System.out.println("Adding patient to Max Heap and Database: " + patient.getName());
         maxHeapCustom.insert(patient);
-        patientRepository.save(patient);
+        databaseOperations.insertPatients(List.of(patient));
         System.out.println("Patient successfully inserted in to Database and Max Heap.");
     }
 
-    public void markAsCured(Long id) {
-        patientRepository.markAsCured(id);
+    public List<Patient> markAsCured(Long id) {
+        return databaseOperations.getAllPatients();
     }
 }
 

@@ -10,16 +10,18 @@ import java.util.concurrent.TimeUnit;
 
 import org.springframework.stereotype.Component;
 
+// File for creating a Custom Max Heap
+
 @Component
 public class MaxHeapCustom {
 
     private final PriorityQueue<Patient> maxHeap;
     private final HashMap<String, Patient> patientMap; 
     private final ScheduledExecutorService scheduler; 
-    private final PatientRepository patientRepository;
+    private final DatabaseOperations databaseOperations;
 
-    public MaxHeapCustom(PatientRepository patientRepository) {
-        this.patientRepository = patientRepository;
+    public MaxHeapCustom(DatabaseOperations databaseOperations) {
+        this.databaseOperations = databaseOperations;
         maxHeap = new PriorityQueue<>((p1, p2) -> Integer.compare(p2.getEmergencyLevel(), p1.getEmergencyLevel()));
         patientMap = new HashMap<>();
         scheduler = Executors.newScheduledThreadPool(1);
@@ -30,6 +32,7 @@ public class MaxHeapCustom {
         return patient.getName() + "-" + patient.getAge() + "-" + patient.getGender() + "-" + patient.getProblem();
     }
 
+    // Function for inserting the data in max heap
     public void insert(Patient patient) {
         String uniqueKey = generateUniqueKey(patient);
         if (!patientMap.containsKey(uniqueKey)) {
@@ -41,6 +44,7 @@ public class MaxHeapCustom {
         }
     }
 
+    // Extracting max heap
     public Patient extractMax() {
         Patient maxPatient = maxHeap.poll(); 
         if (maxPatient != null) {
@@ -57,15 +61,16 @@ public class MaxHeapCustom {
             
             for (Patient patient : updatedPatients) {
                 maxHeap.add(patient);
-                patientRepository.save(patient);
+                databaseOperations.saveOrUpdatePatient(patient);
             }
 
-            patientRepository.save(maxPatient);
+            DatabaseOperations.deleteFromDatabase(maxPatient.getName());
             System.out.println("Marked patient as cured in database: " + maxPatient.getName());
         }
         return maxPatient;
     }
 
+    // Function to increase emergency level
     private void increaseEmergencyLevel(Patient patient) {
         int currentLevel = patient.getEmergencyLevel();
         int age = patient.getAge();
@@ -83,6 +88,7 @@ public class MaxHeapCustom {
         patient.setEmergencyLevel(increasedLevel);
     }
 
+    // Function to check if data already entered or not
     public boolean contains(Patient patient) {
         String uniqueKey = generateUniqueKey(patient);
         return patientMap.containsKey(uniqueKey);
@@ -92,19 +98,22 @@ public class MaxHeapCustom {
         return new ArrayList<>(maxHeap);
     }
 
+    // Threading for auto extracting the data from the heap
     public final void startAutoExtract() {
         scheduler.scheduleAtFixedRate(() -> {
             System.out.println("Auto-extracting patient with highest emergency level...");
             Patient maxPatient = extractMax();
+
             if (maxPatient != null) {
                 System.out.println("Auto-extracted patient: " + maxPatient.getName());
                 DatabaseOperations.deleteFromDatabase(maxPatient.getName());
             } else {
                 System.out.println("No patients to extract.");
             }
-        }, 0, 15, TimeUnit.SECONDS);
+        }, 0, 20, TimeUnit.SECONDS);
     }
 
+    // Thread Scheduler
     public void stopScheduler() {
         if (scheduler != null) {
             scheduler.shutdown();

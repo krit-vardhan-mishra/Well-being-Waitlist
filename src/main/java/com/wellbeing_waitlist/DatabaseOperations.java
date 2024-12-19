@@ -9,29 +9,40 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+// This files is made to perform the operation on the Database to insert, update and delete data from the Database
 @Service
 public class DatabaseOperations {
 
-    // first create a database in mysql and in it create a table with the description given in description.png file in the main folder.
-    public void insertIntoDatabase(Patient patient) {
-        try (Connection connection = DatabaseConnection.getConnection()) {
-            String query = "INSERT INTO patient (name, age, gender, problem, emergency_level) VALUES (?, ?, ?, ?, ?)";
-            try (PreparedStatement statement = connection.prepareStatement(query)) {
-                statement.setString(1, patient.getName());
-                statement.setInt(2, patient.getAge());
-                statement.setString(3, patient.getGender());
-                statement.setString(4, patient.getProblem());
-                statement.setInt(5, patient.getEmergencyLevel());
-                statement.executeUpdate();
-                System.out.println("Inserted patient into database: " + patient.getName());
+    // First create a database in mysql and in it create a table with the description given in description.png file in the main folder.
+
+    // Function to insert data on the database
+    @Transactional
+    public void insertPatients(List<Patient> patients) {
+        String query = "INSERT INTO patient (name, age, gender, problem, emergency_level) VALUES (?, ?, ?, ?, ?)";
+
+        try (Connection connection = DatabaseConnection.getConnection();
+            PreparedStatement statement = connection.prepareStatement(query)) {
+
+                for (Patient patient : patients) {
+                    statement.setString(1, patient.getName());
+                    statement.setInt(2, patient.getAge());
+                    statement.setString(3, patient.getGender());
+                    statement.setString(4, patient.getProblem());
+                    statement.setInt(5, patient.getEmergencyLevel());
+                    statement.addBatch();
+                }
+
+                int[] updateCounts = statement.executeBatch();
+                System.out.println("Inserted patients into database: " + updateCounts.length);
+            } catch (SQLException e) {
+                System.out.println("Error inserting patients into database: " + e.getMessage());
+                e.printStackTrace();
             }
-        } catch (SQLException e) {
-            System.out.println("Error inserting patient into database: " + e.getMessage());
-            e.printStackTrace();
-        }
     }
 
+    // Function to delete (update) data on the database
     public static void deleteFromDatabase(String name) {
         try (Connection connection = DatabaseConnection.getConnection()) {
             String query = "UPDATE patient SET cured = TRUE WHERE NAME = ?";
@@ -44,6 +55,7 @@ public class DatabaseOperations {
         }
     }
 
+    // Function to update details of user
     public void saveOrUpdatePatient(Patient patient) {
         try (Connection connection = DatabaseConnection.getConnection()) {
             String query = "INSERT INTO patient (name, age, gender, problem, emergency_level, cured) " + "VALUES (?, ?, ?, ?, ?, ?) " + "ON DUPLICATE KEY UPDATE emergency_level = VALUES(emergency_level), cured = VALUES(cured)";
@@ -61,6 +73,7 @@ public class DatabaseOperations {
         }
     }
 
+    // Function helps to retrieve data from database
     public List<Patient> getAllPatients() {
         List<Patient> patients = new ArrayList<>();
 
@@ -89,6 +102,7 @@ public class DatabaseOperations {
         return patients;
     }
 
+    // Function to retrieve data from the database through id
     public Patient getPatientById(Long id) {
         Patient patient = null;
         try (Connection connection = DatabaseConnection.getConnection()) {
@@ -114,6 +128,7 @@ public class DatabaseOperations {
         return patient;
     }
 
+    // Function of retrieving data from the database for admin
     public List<Patient> getAllPatientsAdmin() {
         List<Patient> patients = new ArrayList<>();
 

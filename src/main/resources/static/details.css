@@ -127,3 +127,56 @@ a:hover {
     color: #b1c1d3;
 }
 
+
+/* Loading Screen Styles */
+#loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.box {
+    width: 20px;
+    height: 20px;
+    background: rgb(0, 0, 0);
+    border-radius: 5px;
+    margin: 10px;
+    animation: grow-shrink 1.7s infinite;
+}
+
+#box1 {
+    animation-delay: 0s;
+}
+
+#box2 {
+    animation-delay: 0.2s;
+}
+
+#box3 {
+    animation-delay: 0.4s;
+}
+
+#box4 {
+    animation-delay: 0.6s;
+}
+
+#box5 {
+    animation-delay: 0.8s;
+}
+
+@keyframes grow-shrink {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.5);
+    }
+}
