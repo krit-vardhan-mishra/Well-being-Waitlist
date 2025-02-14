@@ -17,7 +17,9 @@ Data Structure: Custom Max Heap
 
 
 **Project Structure:**
+
 /src/main/java/com/wellbeingwaitlist
+
   ├── config  
   │   ├── AppConfig.java  
   ├── database  
