@@ -35,10 +35,6 @@ build/
 
 src/main/resources/application.properties
 
-src/main/resources/scripts/emergency_levels_precomputed.json
-src/main/resources/scripts/precompute_emergency_levels.py
-
-
 !**/src/main/**/target/
 !**/src/test/**/target/
 !**/src/main/**/build/
