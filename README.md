@@ -19,7 +19,6 @@ Well‑being Waitlist is a hospital portal that prioritizes patient checkups usi
 | Backend     | Spring Boot (Java), REST API          |
 | Frontend    | React.js, Tailwind CSS                |
 | Data Store  | MySQL                                 |
-└──── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ─ ─┘
 
 ## 🚀 How It Works (Updated Flow)
 
