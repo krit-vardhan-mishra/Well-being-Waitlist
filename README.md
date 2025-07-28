@@ -1,62 +1,36 @@
-**Well-being Waitlist**
 
-Well-being Waitlist is a hospital portal designed to efficiently manage patient checkups by prioritizing them based on emergency levels. The system integrates AI to assess patient conditions and dynamically updates priority levels for optimal medical attention.
+# Well‑being Waitlist
 
-**Features:**
-AI-Based Emergency Assessment: Uses a Python AI model (transformers library) to generate an emergency level based on the patient's described problem.
-Custom Max Heap Implementation: Patients are stored in a max heap, ensuring that those with the highest emergency levels are attended first.
-Dynamic Priority Update: Each time a patient is removed for a checkup, the remaining patients' emergency levels increase by 5.
-Spring Boot API: Handles database operations and integrates with the AI model for emergency level calculation.
-MySQL Database: Stores patient details, including name, age, gender, problem description, and emergency level.
+Well‑being Waitlist is a hospital portal that prioritizes patient checkups using **precomputed emergency levels** (no LLM needed), making the system faster and more efficient.
 
-**Technologies Used:**
-Backend: Java (Spring Boot)
-Database: MySQL
-AI Model: Python (transformers library)
-Data Structure: Custom Max Heap
+## Project Overview
+
+- **System goal:** Dynamically manage patient queue by emergency priority.
+- **Updated flow:** Users submit patient problem → mapped to precomputed emergency level → patient is queued in a max‑heap.
+- On each **check‑up**:
+  - Highest‑priority patient is removed.
+  - Remaining patients’ emergency levels increase by a fixed increment (e.g. +5).
+- User interface updates in real time to reflect current queue.
+
+## Tech Stack
+
+| Layer       | Tools & Frameworks                    |
+|-------------|---------------------------------------|
+| Backend     | Spring Boot (Java), REST API          |
+| Frontend    | React.js, Tailwind CSS                |
+| Data Store  | MySQL                                 |
+└──── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ── ─ ─┘
+
+## 🚀 How It Works (Updated Flow)
+
+1. Patient problem is submitted through the React frontend.
+2. The backend maps the problem to a **precomputed emergency level** (LLM will only required when data is not found on precomputed emergency levels).
+3. Patient data is inserted into a **max-heap** based on emergency priority.
+4. Upon checkup:
+   - Highest priority patient is removed.
+   - All remaining patients’ emergency level increases (e.g., by +5).
+5. Frontend reflects real-time updates.
 
 
-**Project Structure:**
-
-/src/main/java/com/wellbeingwaitlist
-
-  ├── config  
-  │   ├── AppConfig.java  
-  ├── database  
-  │   ├── DatabaseConnection.java  
-  │   ├── DatabaseOperations.java  
-  ├── heap  
-  │   ├── MaxHeapCustom.java  
-  ├── model  
-  │   ├── Patient.java  
-  ├── controller  
-  │   ├── PatientController.java  
-  ├── repository  
-  │   ├── PatientRepository.java  
-  ├── service  
-  │   ├── PatientService.java  
-  ├── WellbeingWaitlistApplication.java
-
-**Installation & Setup:**
-1. Clone the repository:
-git clohttps://github.com/krit-vardhan-mishra/Well-being-Waitlist.git
-cd wellbeing-waitlist
-
-2. Set up MySQL database:
-Create a database and update connection details in DatabaseConnection.java.
-
-3. Install dependencies and run the Spring Boot application:
-mvn clean install  
-mvn spring-boot:run
-
-4. Start the AI service (Python script for emergency calculation).
-API Endpoints
-Add a patient: POST /patients
-Get all patients: GET /patients
-Remove highest priority patient: DELETE /patients/top
-Update emergency levels: Automatically adjusted on each removal.
-
-**Future Improvements:**
-Implement a web UI for patient management.
-Enhance AI model for more accurate emergency level predictions.
-Optimize database operations for better performance.
+# SpringBoot-React
+trying to create a project using Spring-Boot in Backend and React.js + Tailwind CSS in Frontend

@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-WellbeingWaitlistBackendApplication<wellbeing_waitlist_backend>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.just_for_fun.wellbeing_waitlist_backend.WellbeingWaitlistBackendApplication",
+            "projectName": "wellbeing_waitlist_backend",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
